@@ -1,0 +1,80 @@
+.Dishes{
+    font-size: 30px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+}
+.top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+
+div a{
+    text-align: right;
+}
+/*
+a:hover {
+    text-decoration: none;
+    color: #e74504;
+}*/
+
+.toright{
+    width: 60px;
+    height: 60px;
+    background-color: grey;
+    color: #ffffff;
+    border-radius: 50%;
+    position:absolute;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-weight: 1000;
+    font-size: 45px;
+    text-align: right;
+    top: 45%;
+    right: 1%;
+    opacity: 0.5;
+}
+
+.toright:hover , .toleft:hover{
+    background-color: #e74504;
+    color: #ffffff;
+}
+
+.toleft{
+    width: 60px;
+    height: 60px;
+    background-color: grey;
+    color: #ffffff;
+    border-radius: 50%;
+    position:absolute;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-weight: 1000;
+    font-size: 45px;
+    text-align: left;
+    top: 45%;
+    left: 1%;
+    opacity: 0.5;
+}
+
+
+
+.services {
+    overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap; 
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+
+.fullservices{
+    position: relative;
+}
+

@@ -1,0 +1,102 @@
+
+.all{
+  position: relative;
+  text-align: left;
+}
+
+@keyframes imageFadeIn {
+  from {    
+    transform: scale(1);
+ 
+  }
+  to {    
+    transform: scale(1.2);
+
+  }
+}
+
+.openning-image{  
+  animation: imageFadeIn 2s ease-in-out forwards;
+  transform-origin: center;
+
+  width: 120%;
+  height: auto;  
+  max-height: 100vh; 
+  object-fit: cover;
+}
+
+.openning-image-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  background-color: #000; 
+  overflow: hidden;
+
+}
+.openning-text{
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes textFadeIn {
+  from {
+    bottom: -20px;
+  }
+  to {
+    bottom: 0px;
+  }
+}
+.welcome-text{
+  animation-name: textFadeIn;
+  animation-duration: 2s;
+  color: white;
+  text-align: left;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+@keyframes textFadeInP {
+  from {
+    opacity: 0;
+    bottom: -20px;
+  }
+  to {
+    opacity: 1;
+    bottom: 0px;
+  }
+}
+
+.openningP{
+  animation-name: textFadeInP;
+  animation-duration: 2s;
+  color: white;
+  text-align: left;
+  font-size: 1.2rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  width: 43rem;
+  margin-top: 25px;
+  position: relative;
+}
+
+.openningButton{
+  background-color: #ffffff; 
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  position: relative;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 80px;
+
+}

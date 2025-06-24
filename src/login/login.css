@@ -1,0 +1,173 @@
+body {
+  background-image: url("food.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  overflow-y: auto;
+}
+
+.topContainer {
+  background-color: #e74504;
+  padding: 40px 35px;
+  border-top-left-radius: 60px;
+  border-top-right-radius: 60px;
+}
+
+.downContainer {
+  padding: 20px 35px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.login-container {
+  background-color: #e74504;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  border-radius: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@font-face {
+  font-family: "Morally Serif";
+  src: url("../public/Morally Serif.otf") format("truetype");
+}
+
+.hello {
+  font-family: arial, serif;
+  font-size: 35px;
+  color: #ffffff;
+}
+.logo {
+  font-family: "Morally Serif", serif;
+  font-size: 15px;
+  color: #ffffff; /*#773d03*/
+}
+
+.login {
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  margin-top: 40px;
+  color: #e74504; /*#FC6A0A*/
+}
+
+.welcome {
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.down {
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.email {
+  position: relative;
+  width: 89%;
+}
+
+.email .icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;
+  font-size: 20px;
+}
+
+.email input {
+  padding-left: 35px;
+  height: 40px;
+  width: 100%;
+  border: 0px solid #ccc;
+  border-radius: 20px;
+}
+
+.password {
+  position: relative;
+  width: 89%;
+  margin-top: 20px;
+}
+
+.password .icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;
+  font-size: 18px;
+}
+
+.password input {
+  padding-left: 35px;
+  height: 40px;
+  width: 100%;
+  border: 0px solid #ccc;
+  border-radius: 20px;
+}
+
+.button {
+  background-color: #e74504; /* #FC6A0A */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-top: 25px;
+}
+
+.center {
+  text-align: center;
+}
+
+.signup {
+  font-family: Arial, serif;
+  font-size: 17px;
+  color: #e74504; /* #FC6A0A */
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 5px;
+  font-weight: bold;
+  outline: none;
+  background: none;
+  border: none;
+}
+.signup:hover {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.or-separator {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.or-text {
+  margin-top: 15px;
+  padding: 0 10px;
+  font-weight: bold;
+  color: #7a6f6f;
+}
+
+.line {
+  margin-top: 15px;
+  flex: 1;
+  height: 1px;
+  background-color: #7a6f6f;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
