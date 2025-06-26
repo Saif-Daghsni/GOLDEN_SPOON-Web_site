@@ -6,15 +6,13 @@ export default function useAddUser() {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const addUser = async ({ title, description, image }) => {
+  const addUser = async ({ image }) => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
 
     try {
       const response = await axios.post("http://127.0.0.1:3001/addOpening", {
-        title,
-        description,
         image,
       });
 

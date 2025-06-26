@@ -23,7 +23,6 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.static("public")); // Serve static files from the 'public' directory
 
 // Routes
 app.get("/", (req, res) => res.send("GoldenSpoon API is running!"));
@@ -73,43 +72,43 @@ app.use((err, req, res, next) => {
 });
 
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public"); // Directory to save uploaded files
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now() +  path.extname(file.originalname)); // Unique filename   
-  },
-});
+const storage = multer.memoryStorage();
 
-const upload = multer({
-  storage: storage,
-  });
+const upload = multer({ storage });
 
-app.post("/upload", upload.single("file"), (req, res) => {
-  console.log("Received file:", req.file); 
-  console.log("Request body:", req.body);
-
-  if (!req.file) {
-    return res.status(400).json({ error: "No file received" });
-  }
-
-  OwnerOpening.create({ image: req.file.filename })
-    .then((result) => res.json(result))
-    .catch((err) => {
-      console.error("MongoDB Error:", err);
-      res.status(500).json({ error: "Failed to save image to DB" });
+app.post("/upload", upload.single("file"), async (req, res) => {
+  try {
+    const newEntry = new OwnerOpening({
+      image: {
+        data: req.file.buffer,
+        contentType: req.file.mimetype
+      }
     });
+
+    await newEntry.save();
+    res.status(201).json({ message: "Image saved to MongoDB" });
+  } catch (err) {
+    console.error("MongoDB save error:", err);
+    res.status(500).json({ error: "Failed to save image" });
+  }
 });
+
+
 
 // GET route to fetch all images
-app.get('/getOpening', async (req, res) => {
-  userModel.find()
-  .then(users => {
-    res.json(users);
-  })
-  .catch(err => { res.json(err) })
-})
+app.get("/getOpening/:id", async (req, res) => {
+  try {
+    const item = await OwnerOpening.findById(req.params.id);
+    if (!item) return res.status(404).send("Image not found");
+
+    res.set("Content-Type", item.image.contentType);
+    res.send(item.image.data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
 
 // Start Server
 // eslint-disable-next-line no-undef

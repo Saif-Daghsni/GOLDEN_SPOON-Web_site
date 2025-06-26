@@ -1,11 +1,25 @@
 import React from 'react'
 import "./Openning.css"
+import useOpening from '../../models/opening/getOpening';
 
 export const Openning = () => {
+
+  
+  const { opening, loading, error } = useOpening();
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading image</p>;
+  /*let image = opening[0]?.image
+    ? `http://localhost:3001/public/${opening[0].image}`
+    : "/default.jpg";*/
+
   return (
     <div className='all'>
         <div className='openning-image-container'>
-        <img src="../../public/federico-ramirez.jpg" alt=""  className='openning-image' />
+        <img 
+  src={`http://localhost:3001/getOpening/${opening[0]._id}`} 
+  alt="Opening" 
+  className='openning-image' 
+/>
         </div>
         <div className='openning-text'>
             <label htmlFor="" className='welcome-text'>Welcome to Golden Spoon!</label>
