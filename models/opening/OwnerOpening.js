@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 
 const ownerOpeningSchema = new mongoose.Schema({
-   /* title : String ,
-    description : String ,
-    price : Number ,*/   
     image : String ,
 })
 

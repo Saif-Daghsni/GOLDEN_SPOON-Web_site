@@ -4,10 +4,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
 import dotenv from "dotenv";
-import userModel from "../models/users.js"; // Make sure the path is correct
+import userModel from "../models/user/users.js"; // Make sure the path is correct
 import multer from "multer";
 import path from "path";
-import OwnerOpening from "../models/OwnerOpening.js";
+import OwnerOpening from "../models/opening/OwnerOpening.js";
 
 dotenv.config({ path: "./server/.env" }); // Make sure the path is correct
 
@@ -23,6 +23,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.static("public")); // Serve static files from the 'public' directory
 
 // Routes
 app.get("/", (req, res) => res.send("GoldenSpoon API is running!"));
@@ -33,7 +34,7 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB!"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Add this to your server.js
+// GET route to fetch all users
 app.get("/getUser", async (req, res) => {
   try {
     const users = await userModel.find();
@@ -66,10 +67,11 @@ app.post("/addUser", async (req, res) => {
 });
 
 // Error Handling Middleware
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Server error!" });
 });
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -85,8 +87,8 @@ const upload = multer({
   });
 
 app.post("/upload", upload.single("file"), (req, res) => {
-  console.log("req.file:", req.file); // 👈 check if it logs the file
-  console.log("req.body:", req.body);
+  console.log("Received file:", req.file); 
+  console.log("Request body:", req.body);
 
   if (!req.file) {
     return res.status(400).json({ error: "No file received" });
@@ -100,6 +102,14 @@ app.post("/upload", upload.single("file"), (req, res) => {
     });
 });
 
+// GET route to fetch all images
+app.get('/getOpening', async (req, res) => {
+  userModel.find()
+  .then(users => {
+    res.json(users);
+  })
+  .catch(err => { res.json(err) })
+})
 
 // Start Server
 // eslint-disable-next-line no-undef

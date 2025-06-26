@@ -3,7 +3,7 @@ import "./login.css";
 import { useNavigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
-import Users from "../../models/useUsers";
+import Users from "../../models/user/useUsers";
 
 export default function Login() {
   const navigate = useNavigate();
