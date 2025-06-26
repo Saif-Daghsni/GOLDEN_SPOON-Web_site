@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Owner from "./Owner_page/Owner";
 
-// home backend
+// all git problems fixed+
 const Login = lazy(() => import("./login/login"));
 const Signup = lazy(() => import("./SignUp/signUp"));
 const Home = lazy(() => import("./home_page/home"));
