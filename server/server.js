@@ -21,7 +21,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+
+app.use(express.json()); 
 
 // Routes
 app.get("/", (req, res) => res.send("GoldenSpoon API is running!"));
