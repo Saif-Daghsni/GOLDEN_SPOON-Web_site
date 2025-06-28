@@ -58,7 +58,6 @@ function covertToBase64(e) {
       })
       .then((data) => {
         console.log("✅ Server responded:", data);
-        // Refresh list after upload:
         getOpenings();
       })
       .catch((err) => console.error("❌ Upload error:", err));

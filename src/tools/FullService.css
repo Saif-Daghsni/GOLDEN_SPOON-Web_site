@@ -65,13 +65,27 @@ a:hover {
 
 
 .services {
-    overflow-x: auto;
-    display: flex;
     flex-direction: row;
     white-space: nowrap; 
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; 
     -ms-overflow-style: none;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.services::-webkit-scrollbar {
+  height: 8px;
+}
+
+.services::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 4px;
+}
+
+.services::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 
 .fullservices{

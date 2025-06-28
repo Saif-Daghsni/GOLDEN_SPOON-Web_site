@@ -6,6 +6,7 @@ import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 const FullServices = () => {
 
   const scrollRef = useRef(null);
+  const autoScrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
 
@@ -29,7 +30,23 @@ const FullServices = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    autoScrollRef.current = setInterval(() => {
+      el.scrollBy({ left: 2 });
+    }, 10);
+
+    return () => clearInterval(autoScrollRef.current);
+  }, []);
+
+  const stopAutoScroll = () => {
+    clearInterval(autoScrollRef.current);
+  };
+
   const scroll = (direction) => {
+    stopAutoScroll(); 
     const el = scrollRef.current;
     if (!el) return;
     const scrollAmount = 200;

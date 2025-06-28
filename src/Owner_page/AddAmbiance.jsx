@@ -1,0 +1,17 @@
+import React from 'react'
+
+const AddAmbiance = () => {
+  return (
+    <div>
+        <label htmlFor="">Name of the plate</label> <br /><br />
+        <input type="text" placeholder='Enter the name of the plate' /> <br /><br />
+        <label htmlFor="">description of the plate</label> <br />
+        <input type="text" placeholder='Enter the description of the plate' /> <br /><br />
+        <label htmlFor="">Price of the plate</label> <br />
+        <input type="number" placeholder='Enter the price of the plate' /> <br /><br />
+        <label htmlFor="">the photo of the plate</label> <br /> <br />
+    </div>
+  )
+}
+
+export default AddAmbiance
