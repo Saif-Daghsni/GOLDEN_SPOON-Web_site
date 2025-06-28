@@ -4,21 +4,20 @@ import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
 import dotenv from "dotenv";
-import userModel from "../models/user/users.js"; // Make sure the path is correct
-import multer from "multer";
-import path from "path";
-import OwnerOpening from "../models/opening/OwnerOpening.js";
+import userModel from "../models/user/users.js";
+import "../models/opening/OwnerOpening.js"
+import { data } from "react-router-dom";
 
-dotenv.config({ path: "./server/.env" }); // Make sure the path is correct
+dotenv.config({ path: "./server/.env" }); 
 
 const uri =
   "mongodb+srv://daghsnisaif:saif2002@goldenspoon.dmdnvmt.mongodb.net/?retryWrites=true&w=majority&appName=GoldenSpoon";
-const app = express();
+const app = express({ limit: "500mb" });
 
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend
+    origin: "http://localhost:5173", 
     credentials: true,
   })
 );
@@ -32,6 +31,14 @@ mongoose
   .connect(uri)
   .then(() => console.log("✅ Connected to MongoDB!"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+
+// Start Server
+// eslint-disable-next-line no-undef
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const Images = mongoose.model("OwnerOpening");
 
 // GET route to fetch all users
 app.get("/getUser", async (req, res) => {
@@ -72,45 +79,26 @@ app.use((err, req, res, next) => {
 });
 
 
-const storage = multer.memoryStorage();
-
-const upload = multer({ storage });
-
-app.post("/upload", upload.single("file"), async (req, res) => {
+app.post("/uploadOpening", async (req, res) => {
+  const {base64}=req.body;  
   try {
-    const newEntry = new OwnerOpening({
-      image: {
-        data: req.file.buffer,
-        contentType: req.file.mimetype
-      }
-    });
 
-    await newEntry.save();
-    res.status(201).json({ message: "Image saved to MongoDB" });
+    await Images.create({image:base64})
+    res.send({Status:"ok"})
+
+    
   } catch (err) {
-    console.error("MongoDB save error:", err);
-    res.status(500).json({ error: "Failed to save image" });
+    res.send({Status:"error",data:err});
   }
 });
-
-
-
-// GET route to fetch all images
-app.get("/getOpening/:id", async (req, res) => {
+app.get("/getOpening", async (req, res) => {
   try {
-    const item = await OwnerOpening.findById(req.params.id);
-    if (!item) return res.status(404).send("Image not found");
+    await Images.find({}).then(data => {
+      res.send({Status:"ok",data:data})
+    })
 
-    res.set("Content-Type", item.image.contentType);
-    res.send(item.image.data);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server error");
+    res.status(500).json({ error: "Failed to fetch openings from DB" });
   }
-});
-
-
-// Start Server
-// eslint-disable-next-line no-undef
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+})

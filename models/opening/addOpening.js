@@ -6,7 +6,7 @@ export default function useAddUser() {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const addUser = async ({ image }) => {
+  const addOpening = async ({ image }) => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
@@ -28,5 +28,5 @@ export default function useAddUser() {
     }
   };
 
-  return { addUser, loading, error, successMessage };
+  return { addOpening, loading, error, successMessage };
 }

@@ -7,8 +7,9 @@ export default function useOpening() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:3001/getOpening')
+    axios.get('http://127.0.0.1:3001/getOpenings')
       .then((res) => {
+        console.log("Fetched opening data:", res.data);
         setOpening(res.data);
         setLoading(false);
       })

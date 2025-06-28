@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Openning.css"
-import useOpening from '../../models/opening/getOpening';
+import useOpening from '../../models/opening/useOpening';
 
 export const Openning = () => {
 
@@ -15,11 +15,15 @@ export const Openning = () => {
   return (
     <div className='all'>
         <div className='openning-image-container'>
-        <img 
-  src={`http://localhost:3001/getOpening/${opening[0]._id}`} 
-  alt="Opening" 
-  className='openning-image' 
-/>
+{opening.length > 0 && (
+  <img 
+    src={`http://localhost:3001/getOpening/${opening[0]._id}`} 
+    alt="Opening" 
+    className="openning-image"
+  />
+)}
+
+
         </div>
         <div className='openning-text'>
             <label htmlFor="" className='welcome-text'>Welcome to Golden Spoon!</label>

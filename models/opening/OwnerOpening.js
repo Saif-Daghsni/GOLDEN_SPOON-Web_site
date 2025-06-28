@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
-import { Buffer } from 'buffer';
 
 
-const ownerOpeningSchema = new mongoose.Schema({
-    image: {
-    data: Buffer,
-    contentType: String,
-  },
-})
+const OpeningSchema = new mongoose.Schema(
+ {
+  image : String,
+ },
 
-const OwnerOpening = mongoose.model('OwnerOpening', ownerOpeningSchema);
+ {
+ collection : 'openings',
+ }
+)
+
+const OwnerOpening = mongoose.model('OwnerOpening', OpeningSchema);
 export default OwnerOpening;
