@@ -20,12 +20,12 @@ export default function useAddUser() {
         location,
       });
 
-      // ✅ Step 3: Debugging logs
+
       console.log("User added successfully:", response.data);
 
       setSuccessMessage(response.data.message);
     } catch (err) {
-      // ✅ Step 3: Debugging logs for errors
+      
       console.error("Add user error:", err.response?.data || err.message);
 
       setError(err.response?.data?.error || "Something went wrong");

@@ -52,7 +52,7 @@ export default function Signup() {
       console.log("Phone number must be less then 9.");
       return;
     } else {
-      await addUser({ name, email, password, phone, location });
+      await addUser({ name, email, password, phone, location }); 
       console.log("Sign Up successful!");
       navigate("/home");
     }

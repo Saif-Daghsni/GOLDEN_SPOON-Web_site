@@ -5,8 +5,8 @@ import cors from "cors";
 import "dotenv/config";
 import dotenv from "dotenv";
 import userModel from "../models/user/users.js";
-import "../models/opening/OwnerOpening.js"
-import { data } from "react-router-dom";
+import "../models/opening/OwnerOpening.js";
+import ambianceModel from "../models/ambiance.js";
 
 dotenv.config({ path: "./server/.env" }); 
 
@@ -92,6 +92,7 @@ app.post("/uploadOpening", async (req, res) => {
     res.send({Status:"error",data:err});
   }
 });
+
 app.get("/getOpening", async (req, res) => {
   try {
     await Images.find({}).then(data => {
@@ -103,3 +104,20 @@ app.get("/getOpening", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch openings from DB" });
   }
 })
+
+app.post("/addAmbiance", async (req, res) => {
+  try {
+    const {name , description , price , image} = req.body;
+    console.log("🟢 Parsed:", { name, description, price, image });
+
+    const newAmbiance = new ambianceModel({ name, description, price, image });
+
+    await newAmbiance.save();
+
+    res.status(201).json({ message: "Ambiance added successfully", user: newAmbiance });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to add Ambiance" });
+  }
+});
+
