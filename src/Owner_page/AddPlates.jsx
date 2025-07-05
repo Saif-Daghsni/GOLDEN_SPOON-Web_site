@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const AddAmbiance = () => {
+const AddPlates = () => {
 
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
@@ -50,7 +50,7 @@ function covertToBase64(e) {
     }console.log("Base64 length:", image.length);
 
 
-    fetch("http://localhost:3001/addAmbiance", {
+    fetch("http://localhost:3001/AddPlates", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -98,4 +98,4 @@ function covertToBase64(e) {
 };
 
 
-export default AddAmbiance
+export default AddPlates;

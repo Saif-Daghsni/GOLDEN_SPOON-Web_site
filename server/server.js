@@ -6,7 +6,7 @@ import "dotenv/config";
 import dotenv from "dotenv";
 import userModel from "../models/user/users.js";
 import "../models/opening/OwnerOpening.js";
-import ambianceModel from "../models/ambiance.js";
+import PlatesModel from "../models/ambiance.js";
 
 dotenv.config({ path: "./server/.env" }); 
 
@@ -105,16 +105,16 @@ app.get("/getOpening", async (req, res) => {
   }
 })
 
-app.post("/addAmbiance", async (req, res) => {
+app.post("/AddPlates", async (req, res) => {
   try {
     const {name , description , price , image} = req.body;
     console.log("🟢 Parsed:", { name, description, price, image });
 
-    const newAmbiance = new ambianceModel({ name, description, price, image });
+    const  newPlate = new PlatesModel({ name, description, price, image });
 
-    await newAmbiance.save();
+    await  newPlate.save();
 
-    res.status(201).json({ message: "Ambiance added successfully", user: newAmbiance });
+    res.status(201).json({ message: "plate added successfully", user: newPlate });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to add Ambiance" });
