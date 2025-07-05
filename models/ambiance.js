@@ -1,15 +1,12 @@
 import mongoose from 'mongoose';
 
-const PlatesSchema = new mongoose.Schema({
-  name: String,
-  description: String,  
-  price: Number,
+const AmbianceSchema = new mongoose.Schema({
   image: String,  
 },
 {
-    collection : 'Plates',
+    collection : 'Ambiance',
 });
 
-const PlatesModel = mongoose.model("OwnerAmbiances", PlatesSchema);
+const AmbianceModel = mongoose.model("OwnerAmbiances", AmbianceSchema);
 
-export default PlatesModel;
+export default AmbianceModel;

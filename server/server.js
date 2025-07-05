@@ -5,8 +5,9 @@ import cors from "cors";
 import "dotenv/config";
 import dotenv from "dotenv";
 import userModel from "../models/user/users.js";
-import "../models/opening/OwnerOpening.js";
-import PlatesModel from "../models/ambiance.js";
+import "../models/OwnerOpening.js";
+import PlatesModel from "../models/Plates.js";
+import AmbianceModel from "../models/Ambiance.js";
 
 dotenv.config({ path: "./server/.env" }); 
 
@@ -41,15 +42,10 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const Images = mongoose.model("OwnerOpening");
 
-// GET route to fetch all users
-app.get("/getUser", async (req, res) => {
-  try {
-    const users = await userModel.find();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch users from DB" });
-  }
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Server error!" });
 });
 
 // POST route to save a new user
@@ -73,12 +69,16 @@ app.post("/addUser", async (req, res) => {
   }
 });
 
-// Error Handling Middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Server error!" });
+// GET route to fetch all users
+app.get("/getUser", async (req, res) => {
+  try {
+    const users = await userModel.find();
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch users from DB" });
+  }
 });
-
 
 app.post("/uploadOpening", async (req, res) => {
   const {base64}=req.body;  
@@ -117,7 +117,22 @@ app.post("/AddPlates", async (req, res) => {
     res.status(201).json({ message: "plate added successfully", user: newPlate });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to add Ambiance" });
+    res.status(500).json({ error: "Failed to add plate" });
   }
 });
 
+app.post("/AddAmbiance", async (req, res) => {
+  try {
+    const {image} = req.body;
+    console.log("🟢 Parsed:", { image });
+
+    const  newAmbiance = new AmbianceModel({image });
+
+    await  newAmbiance.save();
+
+    res.status(201).json({ message: "Ambiance added successfully", user: newAmbiance});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to add Ambiance" });
+  }
+});

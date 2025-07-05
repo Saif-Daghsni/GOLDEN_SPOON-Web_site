@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 const Owner = () => {
   const [image, setImage] = useState("");
+  const [imageAmbiance, setImageAmbiance] = useState("");
   const [openings, setOpenings] = useState([]);
 
 // NEW VERSION of covertToBase64
-function covertToBase64(e) {
+function covertToBase64(e,a) {
   const file = e.target.files[0];
   if (!file) return;
 
@@ -27,8 +28,13 @@ function covertToBase64(e) {
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); // 70% quality JPEG
-      setImage(compressedBase64);
+      const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); 
+      if(a==1){
+        setImage(compressedBase64);
+      }
+      else{
+        setImageAmbiance(compressedBase64);
+      }
       console.log("✅ Image resized & compressed");
     };
   };
@@ -63,6 +69,29 @@ function covertToBase64(e) {
       .catch((err) => console.error("❌ Upload error:", err));
   }
 
+  function handleUploadAmbiance() {
+    if (!imageAmbiance) {
+      alert("Please select an image first!");
+      return;
+    }
+
+    fetch("http://localhost:3001/AddAmbiance", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image: imageAmbiance }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("✅ Server responded:", data);
+      })
+      .catch((err) => console.error("❌ Upload error:", err));
+  }
+
   function getOpenings() {
     fetch("http://localhost:3001/getOpening")
       .then((res) => res.json())
@@ -80,7 +109,7 @@ function covertToBase64(e) {
   return (
     <div>
       <h2>Upload an Image</h2>
-      <input type="file" accept="image/*" onChange={covertToBase64} />
+      <input type="file" accept="image/*" onChange={(e) => covertToBase64(e, 1)} />
       <br /><br />
       {image && (
         <img src={image} alt="Preview" width={300} height="auto" />
@@ -99,6 +128,16 @@ function covertToBase64(e) {
           style={{ margin: '10px' }}
         />
       ))}
+      <br />
+      <h2>Add ambiance</h2>
+      
+      <input type="file" accept="image/*" onChange={(e) => covertToBase64(e, 2)} />
+      <br /><br />
+      {imageAmbiance && (
+        <img src={imageAmbiance} alt="Preview" width={300} height="auto" />
+      )}
+      <br />
+      <button onClick={handleUploadAmbiance}>Upload</button>
     </div>
   );
 };
