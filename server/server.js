@@ -12,7 +12,7 @@ dotenv.config({ path: "./server/.env" });
 
 const uri =
   "mongodb+srv://daghsnisaif:saif2002@goldenspoon.dmdnvmt.mongodb.net/?retryWrites=true&w=majority&appName=GoldenSpoon";
-const app = express({ limit: "500mb" });
+const app = express();
 
 // Middleware
 app.use(
@@ -22,7 +22,7 @@ app.use(
   })
 );
 
-app.use(express.json()); 
+app.use(express.json({ limit: '900mb' })); 
 
 // Routes
 app.get("/", (req, res) => res.send("GoldenSpoon API is running!"));

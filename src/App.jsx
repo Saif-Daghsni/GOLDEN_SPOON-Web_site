@@ -18,6 +18,7 @@ function App() {
           <Route path="/Owner" element={<Owner />} />
           <Route path="/" element={<Home />} />
           <Route path="/AddAmbiance" element={<AddAmbiance/>} />
+          <Route path="/Owner" element={<Owner />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

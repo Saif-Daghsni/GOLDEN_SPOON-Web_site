@@ -47,7 +47,8 @@ function covertToBase64(e) {
     if (!image) {
       alert("Please select an image first!");
       return;
-    }
+    }console.log("Base64 length:", image.length);
+
 
     fetch("http://localhost:3001/addAmbiance", {
       method: "POST",
