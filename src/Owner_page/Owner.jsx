@@ -7,7 +7,7 @@ const Owner = () => {
   const [ambiance, setAmbiance] = useState([]);
 
 // NEW VERSION of covertToBase64
-function covertToBase64(e,a) {
+function covertToBase64(e, a) {
   const file = e.target.files[0];
   if (!file) return;
 
@@ -19,24 +19,28 @@ function covertToBase64(e,a) {
     img.src = reader.result;
 
     img.onload = () => {
-      // ➜ This is the NEW PART:
       const canvas = document.createElement('canvas');
-      const MAX_WIDTH = 800; // or whatever you want
-      const scaleSize = MAX_WIDTH / img.width;
-      canvas.width = MAX_WIDTH;
-      canvas.height = img.height * scaleSize;
+
+      // ✔️ Use ORIGINAL WIDTH — no resize!
+      canvas.width = img.width;
+      canvas.height = img.height;
 
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); 
-      if(a==1){
+      // ✔️ Save as maximum quality JPEG (or PNG if you prefer lossless)
+      const compressedBase64 = canvas.toDataURL('image/jpeg', 1.0);
+
+      if (a === 1) {
         setImage(compressedBase64);
-      }
-      else{
+      } else {
         setImageAmbiance(compressedBase64);
       }
-      console.log("✅ Image resized & compressed");
+
+      console.log(
+        "✅ Image NOT resized — saved full res @ max quality:",
+        compressedBase64.slice(0, 50) + "..."
+      );
     };
   };
 
@@ -44,6 +48,7 @@ function covertToBase64(e,a) {
     console.log("Error: ", error);
   };
 }
+
 
 
   function handleUpload() {

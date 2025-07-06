@@ -4,35 +4,29 @@
   text-align: left;
 }
 
-@keyframes imageFadeIn {
-  from {    
-    transform: scale(1);
- 
-  }
-  to {    
-    transform: scale(1.2);
-
-  }
+.opening-image {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  max-height: 100vh;
+  object-fit: cover;
 }
 
-.openning-image{  
-  animation: imageFadeIn 2s ease-in-out forwards;
-  transform-origin: center;
-
-  width: 120%;
-  height: auto;  
-  max-height: 100vh; 
-  object-fit: cover;
+.fade-in {
+  opacity: 1;
 }
 
 .openning-image-container{
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
-  background-color: #000; 
+  position: relative;
+  width: 100%;
   overflow: hidden;
-
+  height: 100vh;
+  background-color: #000;
 }
 .openning-text{
   position: absolute;
@@ -84,7 +78,7 @@
 }
 
 .openningButton{
-  background-color: #ffffff; 
+  background-color: #ffffff;
   border: none;
   color: rgb(0, 0, 0);
   padding: 15px 32px;
