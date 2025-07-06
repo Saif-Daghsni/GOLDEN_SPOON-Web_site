@@ -5,7 +5,7 @@ import cors from "cors";
 import "dotenv/config";
 import dotenv from "dotenv";
 import userModel from "../models/user/users.js";
-import "../models/OwnerOpening.js";
+import "../models/Opening.js";
 import PlatesModel from "../models/Plates.js";
 import AmbianceModel from "../models/Ambiance.js";
 
@@ -136,3 +136,13 @@ app.post("/AddAmbiance", async (req, res) => {
     res.status(500).json({ error: "Failed to add Ambiance" });
   }
 });
+
+app.get("/getAmbiance", async (req, res) => {
+  try {
+    const data = await AmbianceModel.find({});
+    res.send({ Status: "ok", data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch Ambiance from DB" });
+  }
+})

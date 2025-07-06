@@ -4,6 +4,7 @@ const Owner = () => {
   const [image, setImage] = useState("");
   const [imageAmbiance, setImageAmbiance] = useState("");
   const [openings, setOpenings] = useState([]);
+  const [ambiance, setAmbiance] = useState([]);
 
 // NEW VERSION of covertToBase64
 function covertToBase64(e,a) {
@@ -88,6 +89,7 @@ function covertToBase64(e,a) {
       })
       .then((data) => {
         console.log("✅ Server responded:", data);
+        getAmbiance();
       })
       .catch((err) => console.error("❌ Upload error:", err));
   }
@@ -102,8 +104,18 @@ function covertToBase64(e,a) {
       .catch((err) => console.error("❌ Fetch error:", err));
   }
 
+  function getAmbiance() {
+    fetch("http://localhost:3001/getAmbiance")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("✅ Ambiance fetched:", data);
+        setAmbiance(data.data);
+      })
+      .catch((err) => console.error("❌ Fetch error:", err));
+  }
   useEffect(() => {
     getOpenings();
+    getAmbiance();
   }, []);
 
   return (
@@ -138,6 +150,18 @@ function covertToBase64(e,a) {
       )}
       <br />
       <button onClick={handleUploadAmbiance}>Upload</button>
+
+      <h2>Saved Ambiance</h2>
+      {ambiance.map((data, index) => (
+        <img
+          key={index}
+          src={data.image}
+          alt={`Ambiance-${index}`}
+          width={100}
+          height="auto"
+          style={{ margin: '10px' }}
+        />
+      ))}
     </div>
   );
 };
