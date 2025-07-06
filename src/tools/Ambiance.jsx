@@ -1,6 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import './Ambiance.css'
 const Ambiance = () => {
+
+  const [ambiance, setAmbiance] = useState([]);
+
+    function getAmbiance() {
+    fetch("http://localhost:3001/getAmbiance")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("✅ Ambiance fetched:", data);
+        setAmbiance(data.data);
+      })
+      .catch((err) => console.error("❌ Fetch error:", err));
+  }
+
+  useEffect(() => {
+    getAmbiance();
+  }, []);
   return (
     <div className='principal'>
         <div>
@@ -10,14 +26,17 @@ const Ambiance = () => {
             </p>
         </div>
         <div className='ambiance-div'>
-            <img src="../../public/nrd.jpg " className='ambiance-image'/>
-            <img src="../../public/karol.jpg " className='ambiance-image'/>
-            <img src="../../public/alex.jpg " className='ambiance-image'/>
-        
-            <img src="../../public/volkan.jpg " className='ambiance-image'/>
-            <img src="../../public/olga.jpg " className='ambiance-image'/>
-            <img src="../../public/spencer.jpg " className='ambiance-image'/>
-
+          {ambiance.map((data, index) => (
+        <img
+          key={index}
+          src={data.image}
+          alt={`Ambiance-${index}`}
+          width={100}
+          height="auto"
+          style={{ margin: '10px' }}
+          className='ambiance-image'
+        />
+      ))}
         </div>
     </div>
   )

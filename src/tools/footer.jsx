@@ -11,39 +11,39 @@ export default function Footer() {
               <td>
                 <div className="title">Explore</div>
                 <div className="links1">
-                  <a href="/explore">Shop All</a>
+                  <a className="a" href="/explore">Shop All</a>
                 </div>
                 <div className="links">
-                  <a href="/explore">Weekend Specials</a>
+                  <a className="a" href="/explore">Weekend Specials</a>
                 </div>
                 <div className="links">
-                  <a href="/explore">Family Meals</a>
+                  <a className="a" href="/explore">Family Meals</a>
                 </div>
               </td>
 
               <td>
                 <div className="title">Visit</div>
                 <div className="links1">
-                  <a href="/explore">Profile</a>
+                  <a className="a" href="/explore">Profile</a>
                 </div>
                 <div className="links">
-                  <a href="/explore">Chat page</a>
+                  <a className="a" href="/explore">Chat page</a>
                 </div>
                 <div className="links">
-                  <a href="/explore">Notifications</a>
+                  <a className="a" href="/explore">Notifications</a>
                 </div>
               </td>
 
               <td>
                 <div className="title">More</div>
                 <div className="links1">
-                  <a href="/explore">Our Story</a>
+                  <a className="a" href="/explore">Our Story</a>
                 </div>
                 <div className="links">
-                  <a href="/explore">Caterings</a>
+                  <a className="a" href="/explore">Caterings</a>
                 </div>
                 <div className="links">
-                  <a href="/explore">Contact Us</a>
+                  <a className="a" href="/explore">Contact Us</a>
                 </div>
               </td>
             </tr>
@@ -56,8 +56,8 @@ export default function Footer() {
       </footer>
       <div className="footer-bottom">
         <a>© 2025 Golden Spoon. All rights reserved.</a>
-        <a href="/explore">Terms and Conditions</a>
-        <a href="/explore">Privacy Police</a>
+        <a className="a" href="/explore">Terms and Conditions</a>
+        <a className="a" href="/explore">Privacy Police</a>
 
         <div>
           <a href="/explore">

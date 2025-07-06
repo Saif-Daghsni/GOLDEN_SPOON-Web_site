@@ -40,8 +40,8 @@ a{
 
 td{
   padding: 10px 200px;
-  min-width: 150px; /* Optional: ensure enough width */
-  white-space: nowrap; /* Optional: prevent text wrap */
+  min-width: 150px; 
+  white-space: nowrap; 
   
 }
 
@@ -84,4 +84,8 @@ td{
 .icon{
   color: #4267B2 ;
   margin-right: -100px;
+}
+
+.a:hover{
+  color: #e74504;
 }

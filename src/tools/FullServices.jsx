@@ -57,7 +57,7 @@ const FullServices = () => {
     <div className='fullservices'>
       <div className='top'>
         <label htmlFor="titleoftheservice" className='Dishes'>Dishes</label>
-        <a href="">See all</a>
+        <a className="a" href="">See all</a>
       </div>
 
       {showLeft && (
