@@ -3,7 +3,7 @@ import './FullService.css';
 import ServiceLabel from './ServiceLabel';
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 
-const FullServices = () => {
+const FullServices = (props) => {
 
   const scrollRef = useRef(null);
   const autoScrollRef = useRef(null);
@@ -56,7 +56,7 @@ const FullServices = () => {
   return (
     <div className='fullservices'>
       <div className='top'>
-        <label htmlFor="titleoftheservice" className='Dishes'>Dishes</label>
+        <label htmlFor="titleoftheservice" className='Dishes'>{props.name}</label>
         <a className="a" href="">See all</a>
       </div>
 

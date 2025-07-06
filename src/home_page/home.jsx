@@ -10,10 +10,10 @@ export default function Home() {
         <div className="home-container">
             <NavBar />
             <Openning />
-            <FullServices />
-            <FullServices />
+            <FullServices name={"Dishes"}/>
+            <FullServices name={"Drinkes"}/>
             <Ambiance />
-            <FullServices />
+            <FullServices name={"Desserts"}/>
             <Footer />
         </div>
     );
