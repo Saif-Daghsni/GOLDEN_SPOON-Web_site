@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Owner from "./Owner_page/Owner";
 import AddPlates from "./Owner_page/AddPlates";
 
-// add plates
+// add ambiance
 const Login = lazy(() => import("./login/login"));
 const Signup = lazy(() => import("./SignUp/signUp"));
 const Home = lazy(() => import("./home_page/home"));
