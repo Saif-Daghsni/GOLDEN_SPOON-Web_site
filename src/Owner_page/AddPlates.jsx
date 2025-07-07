@@ -6,6 +6,7 @@ const AddPlates = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [type, setType] = useState("");
 
 
 function covertToBase64(e) {
@@ -59,6 +60,7 @@ function covertToBase64(e) {
         name: name,
         description: description,
         price: price,
+        type:type,
         image: image 
       }),
     })
@@ -83,7 +85,12 @@ function covertToBase64(e) {
         <label htmlFor="">Price of the plate</label> <br />
         <input type="number" placeholder='Enter the price of the plate' onChange={(e) => setPrice(e.target.value)} /> <br /><br />
         <label htmlFor="">the photo of the plate</label> <br /> <br />
-
+      <select onChange={(e) => setType(e.target.value)}>
+        <option value="Dishes">Dishes</option>
+        <option value="Drinks">Drinkes</option>
+        <option value="Desserts">Desserts</option>
+      </select>
+      <br /><br />
       <input type="file" accept="image/*" onChange={covertToBase64} />
       <br /><br />
       {image && (

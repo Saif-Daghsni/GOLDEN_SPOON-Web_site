@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import './FullService.css';
 import ServiceLabel from './ServiceLabel';
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+import axios from 'axios';
 
 const FullServices = (props) => {
 
@@ -9,6 +10,7 @@ const FullServices = (props) => {
   const autoScrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
+  const [plates, setPlates] = useState([]);
 
   const checkScroll = () => {
     const el = scrollRef.current;
@@ -53,6 +55,16 @@ const FullServices = (props) => {
     el.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
   };
 
+  
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/getPlates")
+      .then((res) => {
+        setPlates(res.data.plates);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+  
   return (
     <div className='fullservices'>
       <div className='top'>
@@ -72,13 +84,17 @@ const FullServices = (props) => {
       )}
 
       <div className='services' ref={scrollRef}>
-        <ServiceLabel />
-        <ServiceLabel />
-        <ServiceLabel />
-        <ServiceLabel />
-        <ServiceLabel />
-        <ServiceLabel />
-        <ServiceLabel />
+        {plates.map((plate)=>(
+        <ServiceLabel
+      key={plate._id}
+      name={plate.name}
+      description={plate.description}
+      price={plate.price}
+      type={plate.type}
+      image={plate.image}
+        />
+        )
+      )}
       </div>
     </div>
   );

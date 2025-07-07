@@ -1,15 +1,15 @@
 import React from 'react'
 import "./ServiceLabel.css"
 
-const ServiceLabel = () => {
+const ServiceLabel = (props) => {
   return (
     <div className='label'>
       <div className='center'>
-        <img src="../../public/plate1.jpg" alt="plate1" className='image'/>
+        <img src={props.image} alt="plate1" className='image'/>
       </div>
         <div className='text'>
-          <label htmlFor="name" className='name'>Kabsa</label>
-          <a href="prive" className='price'>7 DT</a>
+          <label htmlFor="name" className='name'>{props.name}</label>
+          <a href="prive" className='price'>{props.price} DT</a>
         </div>
         
         <div className='buttons'>

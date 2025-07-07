@@ -4,6 +4,7 @@ const PlatesSchema = new mongoose.Schema({
   name: String,
   description: String,  
   price: Number,
+  type: String,
   image: String,  
 },
 {

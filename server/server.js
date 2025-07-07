@@ -107,10 +107,10 @@ app.get("/getOpening", async (req, res) => {
 
 app.post("/AddPlates", async (req, res) => {
   try {
-    const {name , description , price , image} = req.body;
-    console.log("🟢 Parsed:", { name, description, price, image });
+    const {name , description , price , type , image} = req.body;
+    console.log("🟢 Parsed:", { name, description, price, type , image });
 
-    const  newPlate = new PlatesModel({ name, description, price, image });
+    const  newPlate = new PlatesModel({ name, description, price, type , image });
 
     await  newPlate.save();
 
@@ -120,6 +120,17 @@ app.post("/AddPlates", async (req, res) => {
     res.status(500).json({ error: "Failed to add plate" });
   }
 });
+
+app.get("/getPlates", async (req, res) => {
+  try {
+    const plates = await PlatesModel.find({});
+    res.status(200).json({ plates });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to get plates" });
+  }
+});
+
 
 app.post("/AddAmbiance", async (req, res) => {
   try {
