@@ -5,18 +5,17 @@ const NavBar = () => {
   const navigate = useNavigate();
   return (
     <header className="header">
-      <a href="" className="logo">
+      <a href="/" className="logo">
         Golden Spoon
       </a>
       <nav className="navbar">
         <a href="/">Home</a>
-        <a href="/">Dishes</a>
-        <a href="/">Drinks</a>
-        <a href="/">Desserts</a>
-        <a href="/">Notifications</a>
-        <button className="Login" onClick={() => navigate("/login")}>Login</button>
-        <button className="Signup"onClick={() => navigate("/signUp")}>Sign Up</button>
+        <a href="/DisplayPlates">Dishes</a>
+        <a href="/DisplayPlates">Drinks</a>
+        <a href="/DisplayPlates">Desserts</a>
+       
       </nav>
+       <button className="Signup"onClick={() => navigate("/Profile")}>Profile</button>
     </header>
   );
 };

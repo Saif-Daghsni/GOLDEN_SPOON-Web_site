@@ -1,11 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
-import './FullService.css';
-import ServiceLabel from './ServiceLabel';
-import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
-import axios from 'axios';
+import React, { useRef, useState, useEffect } from "react";
+import "./FullService.css";
+import ServiceLabel from "./ServiceLabel";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import axios from "axios";
 
 const FullServices = (props) => {
-
   const scrollRef = useRef(null);
   const autoScrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
@@ -23,12 +22,12 @@ const FullServices = (props) => {
     checkScroll();
     const el = scrollRef.current;
     if (el) {
-      el.addEventListener('scroll', checkScroll);
-      window.addEventListener('resize', checkScroll);
+      el.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
     }
     return () => {
-      if (el) el.removeEventListener('scroll', checkScroll);
-      window.removeEventListener('resize', checkScroll);
+      if (el) el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
     };
   }, []);
 
@@ -48,53 +47,63 @@ const FullServices = (props) => {
   };
 
   const scroll = (direction) => {
-    stopAutoScroll(); 
+    stopAutoScroll();
     const el = scrollRef.current;
     if (!el) return;
     const scrollAmount = 200;
-    el.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    el.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
   };
 
-  
-
   useEffect(() => {
-    axios.get("http://localhost:3001/getPlates")
+    axios
+      .get("http://localhost:3001/getPlates")
       .then((res) => {
         setPlates(res.data.plates);
+        console.log("Plates add succecuffuly");
       })
       .catch((err) => console.error(err));
   }, []);
-  
+
   return (
-    <div className='fullservices'>
-      <div className='top'>
-        <label htmlFor="titleoftheservice" className='Dishes'>{props.name}</label>
-        <a className="a" href="">See all</a>
+    <div className="fullservices">
+      <div className="top">
+        <label htmlFor="titleoftheservice" className="Dishes">
+          {props.name}
+        </label>
+        <a className="a" href="/DisplayPlates">
+          See all
+        </a>
       </div>
 
       {showLeft && (
-        <div className='toleft' onClick={() => scroll('left')}>
+        <div className="toleft" onClick={() => scroll("left")}>
           <FaArrowLeft size={40} color="#ffffff" />
         </div>
       )}
       {showRight && (
-        <div className='toright' onClick={() => scroll('right')}>
+        <div className="toright" onClick={() => scroll("right")}>
           <FaArrowRight size={40} color="#ffffff" />
         </div>
       )}
 
-      <div className='services' ref={scrollRef}>
-        {plates.map((plate)=>(
-        <ServiceLabel
-      key={plate._id}
-      name={plate.name}
-      description={plate.description}
-      price={plate.price}
-      type={plate.type}
-      image={plate.image}
-        />
-        )
-      )}
+      <div className="services" ref={scrollRef}>
+        {plates.map((plate) => {
+          return props.name === plate.type ? (
+            <ServiceLabel
+              key={plate._id}
+              name={plate.name}
+              description={plate.description}
+              price={plate.price}
+              type={plate.type}
+              image={plate.image}
+              setSelectedItem={props.setSelectedItem}
+              setdescription={props.setdescription}
+            />
+          ) : null;
+        })}
       </div>
     </div>
   );

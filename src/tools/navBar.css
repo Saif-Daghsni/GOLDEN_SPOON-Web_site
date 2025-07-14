@@ -29,6 +29,7 @@ header{
     display: flex;
     align-items: center;
     position: relative;
+    justify-content: space-between;
 }
 .navbar a {
     color: #fff;
@@ -37,6 +38,7 @@ header{
     font-weight: 500;
     margin-left: 40px;
     font-family: "Poppins", sans-serif;
+    display: flex;
 }
 
 .navbar a::before {

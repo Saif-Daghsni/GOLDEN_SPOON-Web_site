@@ -55,7 +55,12 @@ export const Openning = () => {
           We offer a refined selection of traditional and fusion dishes,
           prepared with the freshest ingredients. Join us for a memorable dining experience!
         </p>
-        <button className='openningButton'>Explore Menu</button>
+        <button className='openningButton'
+            onClick={() => {
+            const section = document.getElementById('menuSection');
+            section?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >Explore Menu</button>
       </div>
     </div>
   );

@@ -1,8 +1,10 @@
 import React from 'react'
 import "./ServiceLabel.css"
+import Description from './Description';
 
 const ServiceLabel = (props) => {
   return (
+    <>
     <div className='label'>
       <div className='center'>
         <img src={props.image} alt="plate1" className='image'/>
@@ -13,10 +15,22 @@ const ServiceLabel = (props) => {
         </div>
         
         <div className='buttons'>
-          <div className='description' id='1'>Description</div>
-          <div className='cercle' id='2'>+</div>
+          <div
+          className="description"
+          id="1"
+          onClick={() => {
+            props.setSelectedItem({
+              image: props.image,
+              name: props.name,
+              description: props.description,
+            });
+            props.setdescription(true);
+          }}
+          >Description</div>
+          <div className='cercle' id='2' >+</div>
         </div>
     </div>
+    </>
   )
 }
 

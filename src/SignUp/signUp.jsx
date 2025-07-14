@@ -5,7 +5,7 @@ import { useState } from "react";
 import "./signUp.css";
 import { FaUser, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import Users from "../../models/user/useUsers";
-import useAddUser from "../../models/user/user_data/useAddUser";
+import useAddUser from "../../models/user/useAddUser.js";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup() {

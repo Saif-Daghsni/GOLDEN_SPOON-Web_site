@@ -87,7 +87,7 @@ function covertToBase64(e) {
         <label htmlFor="">the photo of the plate</label> <br /> <br />
       <select onChange={(e) => setType(e.target.value)}>
         <option value="Dishes">Dishes</option>
-        <option value="Drinks">Drinkes</option>
+        <option value="Drinkes">Drinkes</option>
         <option value="Desserts">Desserts</option>
       </select>
       <br /><br />
