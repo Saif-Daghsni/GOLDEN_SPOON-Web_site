@@ -43,7 +43,7 @@ function covertToBase64(e) {
 }
 
 
-  function handleUpload() {
+  function handleUploadPlates() {
     
     if (!image) {
       alert("Please select an image first!");
@@ -97,7 +97,7 @@ function covertToBase64(e) {
         <img src={image} alt="Preview" width={300} height="auto" />
       )}
       <br />
-      <button onClick={handleUpload}>Upload</button>
+      <button onClick={handleUploadPlates}>Upload</button>
 
 
     </div>

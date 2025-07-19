@@ -73,7 +73,7 @@ const FullServices = (props) => {
         <label htmlFor="titleoftheservice" className="Dishes">
           {props.name}
         </label>
-        <a className="a" href="/DisplayPlates">
+        <a className="a" href="/DisplayPlates" onClick={() => props.setPlatesname(props.name)}>
           See all
         </a>
       </div>

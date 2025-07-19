@@ -118,6 +118,7 @@ function covertToBase64(e, a) {
       })
       .catch((err) => console.error("❌ Fetch error:", err));
   }
+  
   useEffect(() => {
     getOpenings();
     getAmbiance();

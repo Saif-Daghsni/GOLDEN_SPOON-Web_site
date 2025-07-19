@@ -4,38 +4,42 @@ import "./DisplayPlates.css";
 import NavBar from "../tools/NavBar";
 import ServiceLabel from "../tools/ServiceLabel";
 import { FaSearch } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
-const DisplayPlates = ({ setSelectedItem, setdescription, name }) => {
+const DisplayPlates = ({ setSelectedItem, setdescription }) => {
   const [allPlates, setAllPlates] = useState([]);
   const [plates, setPlates] = useState([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
   const [recherche, setRecherche] = useState("");
-  const [loading, setLoading] = useState(true); // NEW: loading state
+  const [loading, setLoading] = useState(true);
+
+  const location = useLocation();
+  const type = location.state?.type; // ✅ use this instead of props.name
 
   useEffect(() => {
-    setLoading(true); // start loading
+    setLoading(true);
     axios
       .get("http://localhost:3001/getPlates")
       .then((res) => {
-        const filtered = res.data.plates.filter((plate) => plate.type === name);
+        const filtered = res.data.plates.filter((plate) => plate.type === type);
         setAllPlates(res.data.plates);
         setPlates(filtered);
-        setLoading(false); // data fetched, stop loading
+        setLoading(false);
         console.log("Plates fetched successfully");
       })
       .catch((err) => {
         console.error(err);
-        setLoading(false); // stop loading even if error
+        setLoading(false);
       });
-  }, [name]);
+  }, [type]); // ✅ watch `type` not `name`
 
   const handleFilter = () => {
     const minPrice = parseFloat(min) || 0;
     const maxPrice = parseFloat(max) || Infinity;
 
     const filtered = allPlates.filter((plate) => {
-      const matchesType = plate.type === name;
+      const matchesType = plate.type === type;
       const inPriceRange = plate.price >= minPrice && plate.price <= maxPrice;
       const matchesSearch = recherche
         ? plate.name.toLowerCase().includes(recherche.toLowerCase())
@@ -84,7 +88,7 @@ const DisplayPlates = ({ setSelectedItem, setdescription, name }) => {
         </div>
         <div className="plates-research-column">
           <label className="plates-research-title" htmlFor="">
-            The dishes
+            {type}
           </label>
 
           <div className="display-plates">

@@ -20,7 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<Signup />} />
-          <Route path="/DisplayPlates" element={<DisplayPlates setSelectedItem={setSelectedItem} setdescription={setdescription} name={"Dishes"} />} />
+          <Route path="/DisplayPlates" element={<DisplayPlates  setSelectedItem={setSelectedItem} setdescription={setdescription}  />} />
           <Route path="/Owner" element={<Owner />} />
           <Route path="/AddPlates" element={<AddPlates/>} />
           <Route path="/Profile" element={<Profile/>} />

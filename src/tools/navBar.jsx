@@ -1,21 +1,21 @@
 import "./navBar.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const navigate = useNavigate();
+
   return (
     <header className="header">
       <a href="/" className="logo">
         Golden Spoon
       </a>
       <nav className="navbar">
-        <a href="/">Home</a>
-        <a href="/DisplayPlates">Dishes</a>
-        <a href="/DisplayPlates">Drinks</a>
-        <a href="/DisplayPlates">Desserts</a>
-       
+        <Link to="/" >Home</Link>
+        <Link to="/DisplayPlates" state={{ type: 'Dishes' }}>Dishes</Link>
+        <Link to="/DisplayPlates" state={{ type: 'Drinkes' }}>Drinkes</Link>
+        <Link to="/DisplayPlates" state={{ type: 'Desserts' }}>Desserts</Link>
       </nav>
-       <button className="Signup"onClick={() => navigate("/Profile")}>Profile</button>
+      <button className="Signup" onClick={() => navigate("/Profile")}>Profile</button>
     </header>
   );
 };
