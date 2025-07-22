@@ -1,3 +1,11 @@
+.Profile {
+  background-image: url('public/3.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: 100vh; /* Ensures it takes full screen height */
+}
+
 .Profile-container {
   position: fixed;
   top: 75px;
@@ -26,6 +34,9 @@
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+  background: rgba(255, 255, 255, 0.2); /* semi-transparent background */
+  backdrop-filter: blur(10px);         /* this applies the blur */
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .Profile-button-inactive {
@@ -57,6 +68,9 @@
   margin-left: 20px;
   border-radius: 20px;
   border: #e74504 2px solid;
+  background: rgba(255, 255, 255, 0.2); /* semi-transparent background */
+  backdrop-filter: blur(40px);         /* this applies the blur */
+  -webkit-backdrop-filter: blur(40px);
 }
 
 .top-Profile {
@@ -171,6 +185,12 @@
   font-size: 28px;
   font-weight: 600;
 }
+.plates-titles-num2{
+  margin-top: 10px;
+  font-size: 25px;
+  font-weight: 600;
+  color: #6e6e6e;
+}
 
 .plates-inder-title {
   font-size: 14px;
@@ -178,6 +198,15 @@
   margin-bottom: 6px;
   display: block;
   color: #666; /* Slightly darker gray for subtitles */
+}
+
+.plates-titles-p{
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  color: #000000;
+  margin-top: 15px;
+  margin-left: 20px;
+
 }
 
 .row {
@@ -283,9 +312,8 @@
   padding: 10px;
   font-size: 15px;
   font-weight: 600;
-  background-color: #dc2626;
-  color:white;
-
+  background-color: #16a34a;
+  color: #cffae2 ;
   border: none;
   cursor: pointer;
 }
@@ -305,4 +333,39 @@
   align-items: center;
   justify-content: center;
   height: 500px;
+}
+
+
+/********profile*********/
+
+.Profile-login {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #6e6e6e;
+  font-family: "Poppins", sans-serif;
+}
+
+.Profile-password {
+  position: relative;
+  width: 89%;
+  margin-top: 20px;
+}
+
+.Profile-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;
+  font-size: 18px;
+}
+
+.Profile-password input {
+  padding-left: 35px;
+  height: 40px;
+  width: 60%;
+  border: 0px solid #ccc;
+  border-radius: 20px;
 }

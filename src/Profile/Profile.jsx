@@ -3,23 +3,27 @@ import NavBar from "../tools/NavBar";
 import "./Profile.css";
 import axios from "axios";
 import ServiceLabel from "../tools/ServiceLabel";
+import { FaUser, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import Users from "../../models/user/useUsers";
+
 
 const Profile = (props) => {
-  // const [description, setdescription] = useState(false);
-  // const [selectedItem, setSelectedItem] = useState(null);
+
+  // eslint-disable-next-line no-unused-vars
+  const { users, loading1, error1 } = Users();
+  const [user, setUser] = useState(null);
   const [image, setImage] = useState("");
   const [imageAmbiance, setImageAmbiance] = useState("");
   const [imagePlate, setPlate] = useState("");
   const [openings, setOpenings] = useState([]);
   const [ambiance, setAmbiance] = useState([]);
-  const [selected, setSelected] = useState("plates");
+  const [selected, setSelected] = useState("profile");
   const [Description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const [added, setadded] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [plates, setPlates] = useState([]);
 
   const handleDeletePlate = async (id) => {
@@ -116,6 +120,7 @@ const Profile = (props) => {
       })
       .then((data) => {
         console.log("✅ Server responded:", data);
+        setadded(true);
         setName("");
         setDescription("");
         setPrice("");
@@ -193,7 +198,33 @@ const Profile = (props) => {
         setAmbiance(data.data);
       })
       .catch((err) => console.error("❌ Fetch error:", err));
-  }
+  }useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      console.warn("❌ No token found.");
+      setLoading(false);
+      return;
+    }
+
+    axios
+      .get("http://localhost:3001/getUser", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log("✅ User fetched:", res.data);
+        setUser(res.data.user); // Access `.user` because backend returns { user: {...} }
+      })
+      .catch((err) => {
+        console.error("❌ /getUser error:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -202,7 +233,8 @@ const Profile = (props) => {
         const [openingsRes, ambianceRes, platesRes] = await Promise.all([
           fetch("http://localhost:3001/getOpening").then((res) => res.json()),
           fetch("http://localhost:3001/getAmbiance").then((res) => res.json()),
-          axios.get("http://localhost:3001/getPlates"),
+          fetch("http://localhost:3001/getPlates").then((res) => res.json()),
+          // axios.get("http://localhost:3001/getPlates"),
         ]);
 
         setOpenings(openingsRes.data);
@@ -219,8 +251,13 @@ const Profile = (props) => {
     fetchData();
   }, []);
 
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>⚠️ No user data found.</div>;
+
+
+
   return (
-    <div>
+    <div className="Profile">
       <NavBar />
       <div className="Profile-container">
         <div className="Profile-container2">
@@ -313,7 +350,45 @@ const Profile = (props) => {
               {selected === "orders" && "Orders"}
             </div>
 
-            {selected === "profile" && <div className="bottom-Profile"> </div>}
+            {selected === "profile" && (
+              <div className="bottom-Profile">
+                <h2
+                  className="plates-titles"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Your informations
+                </h2>
+                
+                <h2
+                  className="plates-titles-num2"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Name 
+                </h2>
+                <p className="plates-titles-p">{user.name}</p>
+                <h2
+                  className="plates-titles-num2"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Email
+                </h2>
+                <p className="plates-titles-p">{user.email}</p>
+                <h2
+                  className="plates-titles-num2"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Phone number  
+                </h2>
+                <p className="plates-titles-p">{user.phone}</p>
+                <h2
+                  className="plates-titles-num2"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Location 
+                </h2>
+                <p className="plates-titles-p">{user.location}</p>
+              </div>
+            )}
             {selected === "orders" && (
               <div className="bottom-Profile">
                 <h2
@@ -476,7 +551,11 @@ const Profile = (props) => {
                   >
                     Upload
                   </button>
-
+                  {added && (
+                    <div className="successfuly">
+                      Your photo added successfully
+                    </div>
+                  )}
                   <h4
                     className="plates-titles"
                     style={{
@@ -539,7 +618,7 @@ const Profile = (props) => {
                           />
                           <div
                             className="delete-button"
-                            onClick={() => { 
+                            onClick={() => {
                               handleDeletePlate(plate._id);
                             }}
                           >
@@ -758,3 +837,22 @@ const Profile = (props) => {
 };
 
 export default Profile;
+
+function Info({ name, placeholder, type, value, onChange, icon: Icon }) {
+  return (
+    <>
+      <h1 className="Profile-login">{name}</h1>
+      <div className="Profile-password">
+        <Icon className="Profile-icon" />
+        <input
+          placeholder={placeholder}
+          type={type}
+          id={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required
+        />
+      </div>
+    </>
+  );
+}

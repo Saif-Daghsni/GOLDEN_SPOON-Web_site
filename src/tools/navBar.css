@@ -79,6 +79,7 @@ header{
     font-family: "Poppins", sans-serif;
     text-decoration: none;
     margin-left: 10px;
+    cursor: pointer;
 }
 
 .Signup:hover{

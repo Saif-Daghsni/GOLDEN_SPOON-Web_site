@@ -1,15 +1,18 @@
-/* eslint-disable no-unused-vars */
+
+import dotenv from "dotenv";
+dotenv.config({ path: "./server/.env" });
+
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import "dotenv/config";
-import dotenv from "dotenv";
 import userModel from "../models/user/users.js";
 import "../models/Opening.js";
 import PlatesModel from "../models/Plates.js";
 import AmbianceModel from "../models/Ambiance.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
-dotenv.config({ path: "./server/.env" });
+import process from "process";
 
 const uri =
   "mongodb+srv://daghsnisaif:saif2002@goldenspoon.dmdnvmt.mongodb.net/?retryWrites=true&w=majority&appName=GoldenSpoon";
@@ -35,19 +38,56 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Start Server
-// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const Images = mongoose.model("OwnerOpening");
 
 // Error Handling Middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).json({ error: "Server error!" });
 });
 
-// POST route to save a new user
+
+// const authenticateToken = (req, res, next) => {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1];
+
+//   if (!token) return res.sendStatus(401);
+
+//   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+//     if (err) return res.sendStatus(403);
+//     req.user = user; // this will contain user's ID or email (whatever you stored in the token)
+//     next();
+//   });
+// };
+// GET route to fetch all users
+
+app.get("/getUser", async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "Missing or invalid token" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userModel.findById(decoded.id).select("-password"); // Remove password from result
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.post("/addUser", async (req, res) => {
   try {
     const { name, email, password, phone, location } = req.body;
@@ -57,27 +97,44 @@ app.post("/addUser", async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const newUser = new userModel({ name, email, password, phone, location });
+    // 1) Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // 2) Create & save the user
+    const newUser = new userModel({
+      name,
+      email,
+      password: hashedPassword,
+      phone,
+      location,
+    });
     await newUser.save();
 
-    res.status(201).json({ message: "User added successfully", user: newUser });
+    // 3) Sign a JWT
+    const tokenPayload = { id: newUser._id, email: newUser.email };
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    // 4) Send back the user (without password) and the token
+    res.status(201).json({
+      message: "User added successfully",
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        phone: newUser.phone,
+        location: newUser.location,
+      },
+      token,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to add user" });
   }
 });
 
-// GET route to fetch all users
-app.get("/getUser", async (req, res) => {
-  try {
-    const users = await userModel.find();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch users from DB" });
-  }
-});
 
 app.post("/uploadOpening", async (req, res) => {
   const { base64 } = req.body;
@@ -189,3 +246,4 @@ app.delete("/deleteAmbiance/:id", async (req, res) => {
     res.status(500).json({ error: "Faild to delete Ambiance", err });
   }
 });
+

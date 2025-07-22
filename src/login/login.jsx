@@ -28,7 +28,7 @@ export default function Login() {
       users.some((user) => user.email === email && user.password === password)
     ) {
       console.log("Login successful!");
-      navigate("/home");
+      navigate("/");
       console.log("Email:", email);
       console.log("Password:", password);
     } else {
