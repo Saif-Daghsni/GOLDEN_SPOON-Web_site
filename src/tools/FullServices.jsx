@@ -101,6 +101,7 @@ const FullServices = (props) => {
               image={plate.image}
               setSelectedItem={props.setSelectedItem}
               setdescription={props.setdescription}
+              setorder={props.setorder}
             />
           ) : null;
         })}

@@ -43,27 +43,13 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const Images = mongoose.model("OwnerOpening");
 
-// Error Handling Middleware
-app.use((err, req, res) => {
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Server error!" });
 });
 
-
-// const authenticateToken = (req, res, next) => {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
-
-//   if (!token) return res.sendStatus(401);
-
-//   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-//     if (err) return res.sendStatus(403);
-//     req.user = user; // this will contain user's ID or email (whatever you stored in the token)
-//     next();
-//   });
-// };
-// GET route to fetch all users
-
+// User Authentication Routes
 app.get("/getUser", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;

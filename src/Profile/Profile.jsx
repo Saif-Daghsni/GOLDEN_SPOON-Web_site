@@ -5,19 +5,20 @@ import axios from "axios";
 import ServiceLabel from "../tools/ServiceLabel";
 import { FaUser, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import Users from "../../models/user/useUsers";
-
+import Loading from "../tools/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
-
   // eslint-disable-next-line no-unused-vars
   const { users, loading1, error1 } = Users();
+
   const [user, setUser] = useState(null);
   const [image, setImage] = useState("");
   const [imageAmbiance, setImageAmbiance] = useState("");
   const [imagePlate, setPlate] = useState("");
   const [openings, setOpenings] = useState([]);
   const [ambiance, setAmbiance] = useState([]);
-  const [selected, setSelected] = useState("profile");
+  const [selected, setSelected] = useState("plates");
   const [Description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
@@ -26,15 +27,22 @@ const Profile = (props) => {
   const [added, setadded] = useState(false);
   const [plates, setPlates] = useState([]);
 
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.location.href = "/login";
+  };
   const handleDeletePlate = async (id) => {
-    console.log("🟢 Deleting plate with ID:", id);
     try {
       await axios.delete(`http://localhost:3001/deletePlate/${id}`);
-      setOpenings((prev) => prev.filter((item) => item._id !== id));
+      setPlates((prev) => prev.filter((item) => item._id !== id)); // ✅ fixed
     } catch (error) {
-      console.error("❌ Failed to delete opening:", error);
+      console.error("❌ Failed to delete plate:", error);
     }
   };
+
   const handleDeleteOpening = async (id) => {
     try {
       await axios.delete(`http://localhost:3001/deleteOpening/${id}`);
@@ -43,6 +51,7 @@ const Profile = (props) => {
       console.error("❌ Failed to delete opening:", error);
     }
   };
+
   const handleDeleteAmbiance = async (id) => {
     try {
       await axios.delete(`http://localhost:3001/deleteAmbiance/${id}`);
@@ -51,6 +60,7 @@ const Profile = (props) => {
       console.error("❌ Failed to delete ambiance:", error);
     }
   };
+
   function covertToBase64(e, a) {
     const file = e.target.files[0];
     if (!file) return;
@@ -64,29 +74,16 @@ const Profile = (props) => {
 
       img.onload = () => {
         const canvas = document.createElement("canvas");
-
-        // ✔️ Use ORIGINAL WIDTH — no resize!
         canvas.width = img.width;
         canvas.height = img.height;
-
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        // ✔️ Save as maximum quality JPEG (or PNG if you prefer lossless)
         const compressedBase64 = canvas.toDataURL("image/jpeg", 1.0);
 
-        if (a === 3) {
-          setPlate(compressedBase64);
-        } else if (a === 1) {
-          setImage(compressedBase64);
-        } else {
-          setImageAmbiance(compressedBase64);
-        }
-
-        console.log(
-          "✅ Image NOT resized — saved full res @ max quality:",
-          compressedBase64.slice(0, 50) + "..."
-        );
+        if (a === 3) setPlate(compressedBase64);
+        else if (a === 1) setImage(compressedBase64);
+        else setImageAmbiance(compressedBase64);
       };
     };
 
@@ -101,31 +98,23 @@ const Profile = (props) => {
       return;
     }
 
-    fetch("http://localhost:3001/AddPlates", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
+    axios
+      .post("http://localhost:3001/AddPlates", {
+        name,
         description: Description,
-        price: price,
-        type: type,
+        price,
+        type,
         image: imagePlate,
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
-        return res.json();
       })
-      .then((data) => {
-        console.log("✅ Server responded:", data);
+      .then((res) => {
+        console.log("✅ Server responded:", res.data);
         setadded(true);
         setName("");
         setDescription("");
         setPrice("");
         setType("");
-        setImage("");
+        setPlate("");
+        fetchPlates(); // Refresh plates list
       })
       .catch((err) => console.error("❌ Upload error:", err));
   }
@@ -136,19 +125,10 @@ const Profile = (props) => {
       return;
     }
 
-    fetch("http://localhost:3001/uploadOpening", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ base64: image }),
-    })
+    axios
+      .post("http://localhost:3001/uploadOpening", { base64: image })
       .then((res) => {
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        console.log("✅ Server responded:", data);
+        console.log("✅ Server responded:", res.data);
         getOpenings();
         setadded(true);
       })
@@ -161,19 +141,10 @@ const Profile = (props) => {
       return;
     }
 
-    fetch("http://localhost:3001/AddAmbiance", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ image: imageAmbiance }),
-    })
+    axios
+      .post("http://localhost:3001/AddAmbiance", { image: imageAmbiance })
       .then((res) => {
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        console.log("✅ Server responded:", data);
+        console.log("✅ Server responded:", res.data);
         getAmbiance();
         setadded(true);
       })
@@ -181,26 +152,35 @@ const Profile = (props) => {
   }
 
   function getOpenings() {
-    fetch("http://localhost:3001/getOpening")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("✅ Openings fetched:", data);
-        setOpenings(data.data);
+    axios
+      .get("http://localhost:3001/getOpening")
+      .then((res) => {
+        setOpenings(res.data.data);
       })
       .catch((err) => console.error("❌ Fetch error:", err));
   }
 
   function getAmbiance() {
-    fetch("http://localhost:3001/getAmbiance")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("✅ Ambiance fetched:", data);
-        setAmbiance(data.data);
+    axios
+      .get("http://localhost:3001/getAmbiance")
+      .then((res) => {
+        setAmbiance(res.data.data);
       })
       .catch((err) => console.error("❌ Fetch error:", err));
-  }useEffect(() => {
-    const token = localStorage.getItem("authToken");
+  }
 
+  function fetchPlates() {
+    axios
+      .get("http://localhost:3001/getPlates")
+      .then((res) => {
+        setPlates(res.data.plates);
+      })
+      .catch((err) => console.error("❌ Plates fetch error:", err));
+  }
+
+  // Get current user
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
     if (!token) {
       console.warn("❌ No token found.");
       setLoading(false);
@@ -209,14 +189,12 @@ const Profile = (props) => {
 
     axios
       .get("http://localhost:3001/getUser", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       })
       .then((res) => {
         console.log("✅ User fetched:", res.data);
-        setUser(res.data.user); // Access `.user` because backend returns { user: {...} }
+        setUser(res.data.user);
       })
       .catch((err) => {
         console.error("❌ /getUser error:", err);
@@ -226,35 +204,30 @@ const Profile = (props) => {
       });
   }, []);
 
+  // Get all data
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [openingsRes, ambianceRes, platesRes] = await Promise.all([
-          fetch("http://localhost:3001/getOpening").then((res) => res.json()),
-          fetch("http://localhost:3001/getAmbiance").then((res) => res.json()),
-          fetch("http://localhost:3001/getPlates").then((res) => res.json()),
-          // axios.get("http://localhost:3001/getPlates"),
-        ]);
-
-        setOpenings(openingsRes.data);
-        setAmbiance(ambianceRes.data);
+    setLoading(true);
+    Promise.all([
+      axios.get("http://localhost:3001/getOpening"),
+      axios.get("http://localhost:3001/getAmbiance"),
+      axios.get("http://localhost:3001/getPlates"),
+    ])
+      .then(([openingsRes, ambianceRes, platesRes]) => {
+        setOpenings(openingsRes.data.data);
+        setAmbiance(ambianceRes.data.data);
         setPlates(platesRes.data.plates);
-        console.log("Plates add succecuffuly");
-      } catch (err) {
+        console.log("✅ Data fetched successfully");
+      })
+      .catch((err) => {
         console.error("❌ Error fetching data:", err);
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchData();
+      });
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
   if (!user) return <div>⚠️ No user data found.</div>;
-
-
 
   return (
     <div className="Profile">
@@ -262,79 +235,87 @@ const Profile = (props) => {
       <div className="Profile-container">
         <div className="Profile-container2">
           <div className="Profile-navbar">
-            <button
-              id="profile"
-              className={
-                selected === "profile"
-                  ? "Profile-button-active"
-                  : "Profile-button-inactive"
-              }
-              onClick={() => setSelected("profile")}
-            >
-              Profile information
-            </button>
-            <button
-              id="orders"
-              className={
-                selected === "orders"
-                  ? "Profile-button-active"
-                  : "Profile-button-inactive"
-              }
-              onClick={() => setSelected("orders")}
-            >
-              Orders
-            </button>
-            <button
-              id="sales"
-              className={
-                selected === "sales"
-                  ? "Profile-button-active"
-                  : "Profile-button-inactive"
-              }
-              onClick={() => setSelected("sales")}
-            >
-              Sales
-            </button>
-            <button
-              id="plates"
-              className={
-                selected === "plates"
-                  ? "Profile-button-active"
-                  : "Profile-button-inactive"
-              }
-              onClick={() => setSelected("plates")}
-            >
-              Modify plates
-            </button>
+            {user._id === "6851d8128ee75ded21bc64c3" ? (
+              <button
+                id="profile"
+                className={
+                  selected === "profile"
+                    ? "Profile-button-active"
+                    : "Profile-button-inactive"
+                }
+                onClick={() => setSelected("profile")}
+              >
+                Profile information
+              </button>
+            ) : (
+              <>
+                <button
+                  id="orders"
+                  className={
+                    selected === "orders"
+                      ? "Profile-button-active"
+                      : "Profile-button-inactive"
+                  }
+                  onClick={() => setSelected("orders")}
+                >
+                  Orders
+                </button>
+                <button
+                  id="sales"
+                  className={
+                    selected === "sales"
+                      ? "Profile-button-active"
+                      : "Profile-button-inactive"
+                  }
+                  onClick={() => setSelected("sales")}
+                >
+                  Sales
+                </button>
+                <button
+                  id="plates"
+                  className={
+                    selected === "plates"
+                      ? "Profile-button-active"
+                      : "Profile-button-inactive"
+                  }
+                  onClick={() => setSelected("plates")}
+                >
+                  Modify plates
+                </button>
 
-            <button
-              id="opening"
-              className={
-                selected === "opening"
-                  ? "Profile-button-active"
-                  : "Profile-button-inactive"
-              }
-              onClick={() => setSelected("opening")}
-            >
-              Modify the Opening
-            </button>
+                <button
+                  id="opening"
+                  className={
+                    selected === "opening"
+                      ? "Profile-button-active"
+                      : "Profile-button-inactive"
+                  }
+                  onClick={() => setSelected("opening")}
+                >
+                  Modify the Opening
+                </button>
 
-            <button
-              id="ambiance"
-              className={
-                selected === "ambiance"
-                  ? "Profile-button-active"
-                  : "Profile-button-inactive"
-              }
-              onClick={() => setSelected("ambiance")}
-            >
-              Modify Ambiance
-            </button>
+                <button
+                  id="ambiance"
+                  className={
+                    selected === "ambiance"
+                      ? "Profile-button-active"
+                      : "Profile-button-inactive"
+                  }
+                  onClick={() => setSelected("ambiance")}
+                >
+                  Modify Ambiance
+                </button>
+              </>
+            )}
 
             <button
               id="ambiance"
               className="log-out"
-              onClick={() => setSelected("ambiance")}
+              onClick={() => {
+                handleLogout();
+                navigate("/login");
+              }}
             >
               Log Out
             </button>
@@ -358,12 +339,12 @@ const Profile = (props) => {
                 >
                   Your informations
                 </h2>
-                
+
                 <h2
                   className="plates-titles-num2"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  Name 
+                  Name
                 </h2>
                 <p className="plates-titles-p">{user.name}</p>
                 <h2
@@ -377,14 +358,14 @@ const Profile = (props) => {
                   className="plates-titles-num2"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  Phone number  
+                  Phone number
                 </h2>
                 <p className="plates-titles-p">{user.phone}</p>
                 <h2
                   className="plates-titles-num2"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  Location 
+                  Location
                 </h2>
                 <p className="plates-titles-p">{user.location}</p>
               </div>
@@ -462,7 +443,6 @@ const Profile = (props) => {
                 </div>
               </div>
             )}
-
             {selected === "plates" && (
               <div className="bottom-Profile">
                 <div className="bottom-Profile-plates">
@@ -472,12 +452,12 @@ const Profile = (props) => {
                   >
                     Upload an Informations
                   </h2>
+
                   <div className="row">
                     <div>
-                      {" "}
                       <label className="plates-inder-title">
                         Name of the plate
-                      </label>{" "}
+                      </label>
                       <br />
                       <input
                         type="text"
@@ -486,36 +466,35 @@ const Profile = (props) => {
                       />
                     </div>
                     <div>
-                      {" "}
-                      <label className="plates-inder-title" htmlFor="">
-                        description of the plate
-                      </label>{" "}
+                      <label className="plates-inder-title">
+                        Description of the plate
+                      </label>
                       <br />
                       <textarea
                         type="text"
                         placeholder="Enter the description of the plate"
                         onChange={(e) => setDescription(e.target.value)}
-                      />{" "}
+                      />
                     </div>
                   </div>
+
                   <div className="row">
                     <div>
-                      {" "}
-                      <label className="plates-inder-title" htmlFor="">
+                      <label className="plates-inder-title">
                         Price of the plate
-                      </label>{" "}
+                      </label>
                       <br />
                       <input
                         type="number"
                         placeholder="Enter the price of the plate"
                         onChange={(e) => setPrice(e.target.value)}
                         required
-                      />{" "}
+                      />
                     </div>
                     <div>
-                      <label className="plates-inder-title" htmlFor="">
+                      <label className="plates-inder-title">
                         The type of the plate
-                      </label>{" "}
+                      </label>
                       <br />
                       <select
                         onChange={(e) => setType(e.target.value)}
@@ -527,6 +506,7 @@ const Profile = (props) => {
                       </select>
                     </div>
                   </div>
+
                   <label className="Upload-button">
                     Upload Image
                     <input
@@ -551,11 +531,8 @@ const Profile = (props) => {
                   >
                     Upload
                   </button>
-                  {added && (
-                    <div className="successfuly">
-                      Your photo added successfully
-                    </div>
-                  )}
+
+                  {/* DISHES */}
                   <h4
                     className="plates-titles"
                     style={{
@@ -566,33 +543,35 @@ const Profile = (props) => {
                     Dishes
                   </h4>
                   <div className="platesinRow">
-                    {plates.map((plate) => {
-                      return "Dishes" === plate.type ? (
-                        <div className="showcollumndelete">
-                          <ServiceLabel
-                            key={plate._id}
-                            name={plate.name}
-                            description={plate.description}
-                            price={plate.price}
-                            type={plate.type}
-                            image={plate.image}
-                            setSelectedItem={props.setSelectedItem}
-                            setdescription={props.setdescription}
-                          />
-                          <div
-                            className="delete-button"
-                            onClick={() => {
-                              console.log("delete button clicked");
-                              handleDeletePlate(plate._id);
-                            }}
-                          >
-                            {" "}
-                            Delete{" "}
+                    {plates.filter((plate) => plate.type === "Dishes")
+                      .length === 0 ? (
+                      <Loading />
+                    ) : (
+                      plates
+                        .filter((plate) => plate.type === "Dishes")
+                        .map((plate) => (
+                          <div className="showcollumndelete" key={plate._id}>
+                            <ServiceLabel
+                              name={plate.name}
+                              description={plate.description}
+                              price={plate.price}
+                              type={plate.type}
+                              image={plate.image}
+                              setSelectedItem={props.setSelectedItem}
+                              setdescription={props.setdescription}
+                            />
+                            <div
+                              className="delete-button"
+                              onClick={() => handleDeletePlate(plate._id)}
+                            >
+                              Delete
+                            </div>
                           </div>
-                        </div>
-                      ) : null;
-                    })}
+                        ))
+                    )}
                   </div>
+
+                  {/* DRINKES */}
                   <h4
                     className="plates-titles"
                     style={{
@@ -603,32 +582,35 @@ const Profile = (props) => {
                     Drinkes
                   </h4>
                   <div className="platesinRow">
-                    {plates.map((plate) => {
-                      return "Drinkes" === plate.type ? (
-                        <div className="showcollumndelete">
-                          <ServiceLabel
-                            key={plate._id}
-                            name={plate.name}
-                            description={plate.description}
-                            price={plate.price}
-                            type={plate.type}
-                            image={plate.image}
-                            setSelectedItem={props.setSelectedItem}
-                            setdescription={props.setdescription}
-                          />
-                          <div
-                            className="delete-button"
-                            onClick={() => {
-                              handleDeletePlate(plate._id);
-                            }}
-                          >
-                            {" "}
-                            Delete{" "}
+                    {plates.filter((plate) => plate.type === "Drinkes")
+                      .length === 0 ? (
+                      <Loading />
+                    ) : (
+                      plates
+                        .filter((plate) => plate.type === "Drinkes")
+                        .map((plate) => (
+                          <div className="showcollumndelete" key={plate._id}>
+                            <ServiceLabel
+                              name={plate.name}
+                              description={plate.description}
+                              price={plate.price}
+                              type={plate.type}
+                              image={plate.image}
+                              setSelectedItem={props.setSelectedItem}
+                              setdescription={props.setdescription}
+                            />
+                            <div
+                              className="delete-button"
+                              onClick={() => handleDeletePlate(plate._id)}
+                            >
+                              Delete
+                            </div>
                           </div>
-                        </div>
-                      ) : null;
-                    })}
+                        ))
+                    )}
                   </div>
+
+                  {/* DESSERTS */}
                   <h4
                     className="plates-titles"
                     style={{
@@ -639,38 +621,40 @@ const Profile = (props) => {
                     Desserts
                   </h4>
                   <div className="platesinRow">
-                    {plates.map((plate) => {
-                      return "Desserts" === plate.type ? (
-                        <div className="showcollumndelete">
-                          <ServiceLabel
-                            key={plate._id}
-                            name={plate.name}
-                            description={plate.description}
-                            price={plate.price}
-                            type={plate.type}
-                            image={plate.image}
-                            setSelectedItem={props.setSelectedItem}
-                            setdescription={props.setdescription}
-                          />
-                          <div
-                            className="delete-button"
-                            onClick={() => {
-                              console.log("delete button clicked");
-                              handleDeletePlate(plates._id);
-                            }}
-                          >
-                            {" "}
-                            Delete{" "}
+                    {plates.filter((plate) => plate.type === "Desserts")
+                      .length === 0 ? (
+                      <Loading />
+                    ) : (
+                      plates
+                        .filter((plate) => plate.type === "Desserts")
+                        .map((plate) => (
+                          <div className="showcollumndelete" key={plate._id}>
+                            <ServiceLabel
+                              name={plate.name}
+                              description={plate.description}
+                              price={plate.price}
+                              type={plate.type}
+                              image={plate.image}
+                              setSelectedItem={props.setSelectedItem}
+                              setdescription={props.setdescription}
+                            />
+                            <div
+                              className="delete-button"
+                              onClick={() => handleDeletePlate(plate._id)}
+                            >
+                              Delete
+                            </div>
                           </div>
-                        </div>
-                      ) : null;
-                    })}
+                        ))
+                    )}
                   </div>
+
                   <br />
                   <br />
-                </div>{" "}
+                </div>
               </div>
             )}
+
             {selected === "opening" && (
               <div className="bottom-Profile">
                 <h2 style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -711,10 +695,7 @@ const Profile = (props) => {
                 </h2>
                 <div className="row">
                   {loading ? (
-                    <div className="plates-loader">
-                      <div className="spinner"></div>
-                      <p>Loading plates...</p>
-                    </div>
+                    <Loading />
                   ) : openings.length > 0 ? (
                     openings.map((data, index) => (
                       <div className="column">
@@ -738,7 +719,7 @@ const Profile = (props) => {
                       </div>
                     ))
                   ) : (
-                    <p>No plates found.</p>
+                    <Loading />
                   )}
                 </div>
               </div>
@@ -796,15 +777,11 @@ const Profile = (props) => {
                 </h2>
                 <div className="row">
                   {loading ? (
-                    <div className="plates-loader">
-                      <div className="spinner"></div>
-                      <p>Loading plates...</p>
-                    </div>
+                    <Loading />
                   ) : ambiance.length > 0 ? (
                     ambiance.map((data, index) => (
-                      <div className="column">
+                      <div className="column" key={index}>
                         <img
-                          key={index}
                           src={data.image}
                           alt={`opening-${index}`}
                           width={100}
@@ -824,7 +801,7 @@ const Profile = (props) => {
                       </div>
                     ))
                   ) : (
-                    <p>No plates found.</p>
+                    <Loading />
                   )}
                 </div>
               </div>
@@ -838,6 +815,7 @@ const Profile = (props) => {
 
 export default Profile;
 
+// eslint-disable-next-line no-unused-vars
 function Info({ name, placeholder, type, value, onChange, icon: Icon }) {
   return (
     <>

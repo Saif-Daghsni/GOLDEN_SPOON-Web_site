@@ -1,0 +1,58 @@
+.Achat{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    border-radius: 50%;
+    background-color: #e74504;
+    color: #ffffff;
+    cursor: pointer;
+}  
+
+.Achat.expanded {
+  width: 230px;
+  height: 500px;
+  background-color: white;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid #ccc;
+  z-index: 999;
+  border-radius: 15px;
+  border: #e74504 2px solid;
+}
+
+.panel-content {
+  margin-top: 10px;
+  color: black;
+  position: relative;
+  width: 100%; 
+}
+
+.LeftArrow{
+    background-color: #e74504;
+    color: white;
+    border-radius: 50%;
+    padding: 4px;
+}
+.thatbutton {
+  width: 90%;
+  height: 35px;
+  padding: 5px;
+  border-radius: 15px;
+  background-color: #e74504;
+  color: white;
+  font-weight: bold;
+  border: none;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
