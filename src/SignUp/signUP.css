@@ -4,14 +4,39 @@ body {
   background-attachment: fixed;
   overflow-y: auto;
 }
-
+body::-webkit-scrollbar {
+  display: none;
+}
 .topContainer {
   background-color: #e74504;
   padding: 15px 35px;
   border-top-left-radius: 60px;
   border-top-right-radius: 60px;
 }
-
+.hello {
+  font-family: arial, serif;
+  font-size: 35px;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+.welcome{
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+.button {
+  background-color: #e74504; /* #FC6A0A */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-top: 25px;
+}
 .downContainer {
   padding: 5px 35px 25px;
   border-radius: 40px;
@@ -19,14 +44,15 @@ body {
 }
 .login-container {
   background-color: #e74504;
-  top: 50%;
+  top: 100%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
   border-radius: 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-top: 130px;
-  margin-bottom: 100px;
+  margin-top: 500px;
+  margin-bottom: -80px;
+  margin-left: 650px;
 }
 @font-face {
   font-family: "Morally Serif";

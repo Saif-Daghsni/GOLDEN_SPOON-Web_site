@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Ambiance.css'
-const Ambiance = () => {
+const Ambiance = (props) => {
 
   const [ambiance, setAmbiance] = useState([]);
 
@@ -15,8 +15,11 @@ const Ambiance = () => {
   }
 
   useEffect(() => {
+    props.setIsLoading(true);
     getAmbiance();
+    props.setIsLoading(false);
   }, []);
+  
   return (
     <div className='principal'>
         <div>

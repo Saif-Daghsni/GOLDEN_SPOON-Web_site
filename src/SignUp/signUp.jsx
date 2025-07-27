@@ -1,13 +1,12 @@
 import { MdEmail } from "react-icons/md";
 import { FaLock, FaUser, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./signUp.css";
 import axios from "axios";
 
 export default function Signup() {
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,7 +15,6 @@ export default function Signup() {
     phone: "",
     location: "",
   });
-
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -27,23 +25,24 @@ export default function Signup() {
     e.preventDefault();
     const { name, email, password, confirmPassword, phone, location } = form;
 
-    // --- Client-side validation ---
+    // Client-side validation
     let errs = {};
     if (!name) errs.name = "Name is required";
     if (!email) errs.email = "Email is required";
     if (!password) errs.password = "Password is required";
-    if (password !== confirmPassword)
+    if (password !== confirmPassword) {
       errs.confirmPassword = "Passwords do not match";
+    }
     if (!phone) errs.phone = "Phone number is required";
-    else if (phone.length > 8)
-      errs.phone = "Phone must be 8 digits or fewer";
+    else if (phone.length !== 8) {
+      errs.phone = "Phone must be 8 digits ";
+    }
     if (!location) errs.location = "Location is required";
 
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
     try {
-      // Make request to backend
       const response = await axios.post(
         "http://localhost:3001/addUser",
         { name, email, password, phone, location },
@@ -51,17 +50,26 @@ export default function Signup() {
       );
 
       const { token, user } = response.data;
-
-      // Store token and user info
       localStorage.setItem("authToken", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      navigate("/"); // Go to Home
+      navigate("/login");
     } catch (err) {
-      console.error("Signup error:", err);
-      setErrors({ server: err.response?.data?.error || "Signup failed" });
+      const errorMsg = err.response?.data?.error || "Signup failed";
+      setErrors({ server: errorMsg });
     }
   };
+
+  useEffect(() => {
+    document.body.style.backgroundImage = `url("src/SignUp/signupBackground.jpg")`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundAttachment = "fixed";
+    document.body.style.overflowY = "auto";
+
+    return () => {
+      document.body.style.backgroundImage = "";
+    };
+  }, []);
 
   return (
     <div className="login-container">
@@ -139,7 +147,7 @@ export default function Signup() {
   );
 }
 
-// Reusable input field with label, icon, and error
+// Reusable input component
 // eslint-disable-next-line no-unused-vars
 function Info({ label, name, type = "text", value, onChange, icon: Icon, error }) {
   return (

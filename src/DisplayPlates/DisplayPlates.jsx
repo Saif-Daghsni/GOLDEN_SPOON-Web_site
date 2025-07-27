@@ -5,6 +5,7 @@ import NavBar from "../tools/NavBar";
 import ServiceLabel from "../tools/ServiceLabel";
 import { FaSearch } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import Loading from "../tools/Loading";
 
 const DisplayPlates = ({ setSelectedItem, setdescription }) => {
   const [allPlates, setAllPlates] = useState([]);
@@ -12,10 +13,11 @@ const DisplayPlates = ({ setSelectedItem, setdescription }) => {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
   const [recherche, setRecherche] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true);
 
   const location = useLocation();
-  const type = location.state?.type; // ✅ use this instead of props.name
+  const type = location.state?.type;
 
   useEffect(() => {
     setLoading(true);
@@ -32,7 +34,7 @@ const DisplayPlates = ({ setSelectedItem, setdescription }) => {
         console.error(err);
         setLoading(false);
       });
-  }, [type]); // ✅ watch `type` not `name`
+  }, [type]);
 
   const handleFilter = () => {
     const minPrice = parseFloat(min) || 0;
@@ -92,7 +94,26 @@ const DisplayPlates = ({ setSelectedItem, setdescription }) => {
           </label>
 
           <div className="display-plates">
-            {loading ? (
+            {plates.filter((plate) => plate.type === type).length === 0 ? (
+              <Loading />
+            ) : (
+              plates
+                .filter((plate) => plate.type === type)
+                .map((plate) => (
+                  <div className="showcollumndelete" key={plate._id}>
+                    <ServiceLabel
+                      name={plate.name}
+                      description={plate.description}
+                      price={plate.price}
+                      type={plate.type}
+                      image={plate.image}
+                      setSelectedItem={setSelectedItem}
+                      setdescription={setdescription}
+                    />
+                  </div>
+                ))
+            )}
+            {/* {loading ? (
               <div className="plates-loader">
                 <div className="spinner"></div>
                 <p>Loading plates...</p>
@@ -112,7 +133,7 @@ const DisplayPlates = ({ setSelectedItem, setdescription }) => {
               ))
             ) : (
               <p>No plates found.</p>
-            )}
+            )} */}
           </div>
         </div>
       </div>

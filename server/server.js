@@ -1,4 +1,3 @@
-
 import dotenv from "dotenv";
 dotenv.config({ path: "./server/.env" });
 
@@ -48,6 +47,32 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Server error!" });
 });
+
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Server error during login" });
+  }
+});
+
 
 // User Authentication Routes
 app.get("/getUser", async (req, res) => {
@@ -121,7 +146,6 @@ app.post("/addUser", async (req, res) => {
   }
 });
 
-
 app.post("/uploadOpening", async (req, res) => {
   const { base64 } = req.body;
   try {
@@ -192,7 +216,6 @@ app.delete("/deletePlate/:id", async (req, res) => {
   }
 });
 
-
 app.post("/AddAmbiance", async (req, res) => {
   try {
     const { image } = req.body;
@@ -222,14 +245,12 @@ app.get("/getAmbiance", async (req, res) => {
 });
 
 app.delete("/deleteAmbiance/:id", async (req, res) => {
-  
   try {
     const { id } = req.params;
 
-    await AmbianceModel.findByIdAndDelete(id); 
+    await AmbianceModel.findByIdAndDelete(id);
     res.status(200).json({ message: "Ambiance deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Faild to delete Ambiance", err });
   }
 });
-
