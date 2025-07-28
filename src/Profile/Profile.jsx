@@ -18,7 +18,7 @@ const Profile = (props) => {
   const [imagePlate, setPlate] = useState("");
   const [openings, setOpenings] = useState([]);
   const [ambiance, setAmbiance] = useState([]);
-  const [selected, setSelected] = useState("plates");
+  const [selected, setSelected] = useState("profile");
   const [Description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
@@ -235,7 +235,7 @@ const Profile = (props) => {
       <div className="Profile-container">
         <div className="Profile-container2">
           <div className="Profile-navbar">
-            {user._id === "6851d8128ee75ded21bc64c3" ? (
+            {user._id !== "688684add872e3672c58d5ba" ? (
               <button
                 id="profile"
                 className={
