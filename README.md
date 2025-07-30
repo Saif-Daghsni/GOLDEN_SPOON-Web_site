@@ -24,3 +24,4 @@ Database: MongoDB (with Mongoose ODM)
 Authentication: JSON Web Token (JWT), bcrypt
 
 📹 You can watch the demo video below to see the project in action and explore all the features visually: 
+https://drive.google.com/drive/folders/1N68oZACbsWiyO4xQocoXiV-3AiwEEo9Y
