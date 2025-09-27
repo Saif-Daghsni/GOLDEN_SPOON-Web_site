@@ -4,7 +4,7 @@ The Golden Spoon website is a full-stack restaurant web application developed us
 
 ---
 
-##Key Features:
+## ⚙️ Key Features:
 
 - Dynamic Menu Display: View a rich, categorized menu with images and descriptions of dishes fetched directly from MongoDB.
 
@@ -18,7 +18,7 @@ The Golden Spoon website is a full-stack restaurant web application developed us
 
 ---
 
-##Tech Stack:
+## 🛠 Tech Stack:
 
 - **Frontend**: React.js, CSS, React Router, Axios
 
