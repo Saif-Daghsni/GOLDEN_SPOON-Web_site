@@ -1,44 +1,34 @@
-# Microprocessor Design (VHDL)
+# Golden Spoon – Restaurant Website (MERN Stack)
 
-This project is a complete design and simulation of a **simple 16-bit microprocessor** with a **12-bit address bus**, implemented in **VHDL**.  
-Built around the **Von Neumann architecture**, it demonstrates how a basic CPU fetches, decodes, and executes instructions — providing a clear understanding of computer architecture fundamentals.
+The Golden Spoon website is a full-stack restaurant web application developed using the MERN stack (MongoDB, Express.js, React, Node.js). This elegant and responsive platform is designed to enhance the dining experience by making it easier for customers to browse the menu, and place online orders.
 
 ---
 
 ## ⚙️ Key Features:
 
-- **16-bit Data Bus & 12-bit Address Bus**: Supports up to 4096 memory locations.  
-- **Von Neumann Architecture**: Unified memory for data and instructions.  
-- **Simple Instruction Set**: Load, store, add, subtract, jump, and halt operations.  
-- **5-State Finite State Machine (FSM)**: Manages instruction fetch, decode, and execution phases.  
-- **ALU Operations**: Supports addition, subtraction, data transfer, and increment.  
-- **Status Flags**: Zero and Sign flags for conditional jumps.  
-- **Memory-Mapped I/O Ready**: Can be extended to include peripherals.  
-- **Clean Modular Design**: Each component (PC, ALU, ACC, IR, Memory) designed as an independent block.  
+- **Dynamic Menu Display**: View a rich, categorized menu with images and descriptions of dishes fetched directly from MongoDB.
+
+- **Online Ordering**: Customers can add items to their cart and place secure food orders for pickup or delivery.
+
+- **Admin Dashboard**: Restaurant owners can manage menu items, view orders, track reservations, and update site content.
+
+- **Authentication**: Secure login and registration for users and admins using JWT and bcrypt.
+
+- **Responsive Design**: Built with modern UI practices using React, ensuring seamless performance across devices.
 
 ---
 
-## 💡 Sample Program
+## 🛠 Tech Stack:
 
-The included example program demonstrates:
-- Arithmetic operations (`ADD`, `SUB`)  
-- Conditional branching (`JGE`)  
-- Looping until a condition fails  
-- Data movement between memory and the accumulator  
+- **Frontend**: React.js, CSS, React Router, Axios
 
----
+- **Backend**: Node.js, Express.js
 
-## 🛠 Implementation Details
+- **Database**: MongoDB (with Mongoose ODM)
 
-- **Language:** VHDL  
-- **Simulation Tools:** ModelSim / Vivado  
-- **Design Type:** Fully synchronous with clock and reset  
-- **Control Unit:** FSM generating all control signals  
-- **Timing:** Multi-cycle instruction execution  
+- **Authentication**: JSON Web Token (JWT), bcrypt
 
 ---
 
-## 📁 Un document explicatif
-
-https://drive.google.com/file/d/1TaBTofcVBtfO3Bi3qF4Kcl5tt2nlj2Wc/view?usp=drivesdk
-
+📹 You can watch the demo video below to see the project in action and explore all the features visually: 
+[https://drive.google.com/drive/folders/1N68oZACbsWiyO4xQocoXiV-3AiwEEo9Y](https://drive.google.com/file/d/1n_y1PRaMLs6nH4jBPpT5FraS-GZu93VG/view?usp=drive_link)
