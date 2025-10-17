@@ -38,5 +38,7 @@ The included example program demonstrates:
 
 ---
 
-## 📁 Repository Structure
+## 📁 Un document explicatif
+
+https://drive.google.com/file/d/1TaBTofcVBtfO3Bi3qF4Kcl5tt2nlj2Wc/view?usp=drivesdk
 
